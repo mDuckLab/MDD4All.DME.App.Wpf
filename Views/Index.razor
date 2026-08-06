@@ -1,0 +1,35 @@
+@page "/"
+@namespace MDD4All.DME.App.Wpf
+@using MDD4All.DME.ViewModels.DataManager
+@using MDD4All.DME.Views.Dialogs
+@using MDD4All.DME.Views.Editor
+@using MDD4All.DME.Views.SettingsDialog
+@using MDD4All.DME.Views.StartPage
+
+@* Pages: mutually exclusive main content *@
+@switch(DataContext.ViewState)
+{
+    case EViewState.ShowStartPage:
+        <StartPageView OnSettingsRequested="@(() => DataContext.ActiveOverlay = EOverlayState.Settings)" />
+        break;
+
+    case EViewState.ShowEditor:
+        <EditorMainView />
+        break;
+}
+
+@* Overlay: needed on every page *@
+@switch (DataContext.ActiveOverlay)
+{
+    case EOverlayState.Settings:
+        <SettingsDialog OnClose="OnSettingsClose" />
+        break;
+
+    case EOverlayState.TypeSelection:
+        <TypeSelectionView />
+        break;
+
+    case EOverlayState.CultureChange:
+        <CultureChangeDialog DataContext="DataContext" />
+        break;
+}
